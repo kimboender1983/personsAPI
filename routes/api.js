@@ -5,11 +5,15 @@ const Person = require('../models/person');
 // GET method
 router.get('/persons', function(req,res, next) {
 
-
-    Person.find({last_name: new RegExp(req.query.query, "i")}, null).then((person) => {
-
-        res.send(person);
-    });
+    Person.find({ $or: [
+        { first_name: new RegExp(req.query.query, "i") },
+        { flast_name: new RegExp(req.query.query, "i") },
+        { email: new RegExp(req.query.query, "i") },
+        { gender: new RegExp(req.query.query, "i") }
+    ] }).then((result) => {
+        res.send(result);
+    })
+    .catch(next);
 });
 
 // POST method
